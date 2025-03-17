@@ -1,0 +1,96 @@
+---
+title: "STAT 418 Final Project"
+format: html
+editor: visual
+---
+
+## Load Data
+
+```{r}
+library(readr)
+library(dplyr)
+library(ggplot2)
+
+pros <- read_csv("PROS.csv")
+
+```
+
+## Summary Statistics (Quantitative)
+
+```{r}
+# AGE
+pros |>
+  summarise(mean(AGE), sd(AGE), median(AGE))
+
+ggplot(pros, aes(x = AGE)) +
+  geom_histogram(binwidth = 5, fill = "darkblue", color = "black") + 
+  labs(title = "Distribution of Age", x = "Age (years)", y = "Frequency") + theme_minimal()
+
+# PSA
+pros |>
+  summarise(mean(PSA), sd(PSA), median(PSA))
+
+ggplot(pros, aes(x = PSA)) +
+  geom_histogram(binwidth = 2, fill = "darkred", color = "black") +
+  labs(title = "Distribution of PSA Levels", x = "PSA (mg/ml)", y = "Frequency") +
+  theme_minimal()
+
+# Tumor Volume (VOL)
+pros |>
+  summarise(mean(VOL), sd(VOL), median(VOL))
+
+ggplot(pros, aes(x = VOL)) +
+  geom_histogram(binwidth = 5, fill = "darkgreen", color = "black") +
+  labs(title = "Distribution of Tumor Volume", x = "Tumor Volume (cm³)", y = "Frequency") +
+  theme_minimal()
+
+# Gleason Score
+pros |>
+  summarise(mean(GLEASON), sd(GLEASON), median(GLEASON))
+
+ggplot(pros, aes(x = GLEASON)) +
+  geom_histogram(binwidth = 1, fill = "purple4", color = "black") +
+  labs(title = "Distribution of Gleason Scores", x = "Gleason Score", y = "Frequency") +   theme_minimal()
+
+# Summary statistics for quantitative variables
+quantitative_vars <- pros |>
+  select(AGE, PSA, VOL, GLEASON)
+
+summary(quantitative_vars)
+sd(pros$AGE, na.rm = TRUE)
+sd(pros$PSA, na.rm = TRUE)
+sd(pros$VOL, na.rm = TRUE)
+sd(pros$GLEASON, na.rm = TRUE)
+
+```
+
+## Summary Statistics (Categorical)
+
+```{r}
+# RACE
+pros |>
+  group_by(RACE) |>
+  summarise(n())
+ggplot(pros, aes(x = as.factor(RACE))) +
+  geom_bar(fill = "darkblue", color = "black") +
+  labs(title = "Distribution of Race", x = "Race (1 = White, 2 = Black)", y = "Count") +
+  theme_minimal()
+
+
+# DPROS
+ggplot(pros, aes(x = as.factor(DPROS))) +
+  geom_bar(fill = "darkred", color = "black") +
+  labs(title = "Results of Digital Rectal Exam", x = "DPROS (1-4)", y = "Count") +
+  theme_minimal()
+
+# DCAPS
+ggplot(pros, aes(x = as.factor(DCAPS))) +
+  geom_bar(fill = "darkgreen", color = "black") +
+  labs(title = "Capsular Detection in Rectal Exam", x = "DCAPS (1 = No, 2 = Yes)", y = "Count") +
+  theme_minimal()
+
+# CAPSULE
+ggplot(pros, aes(x = as.factor(CAPSULE))) +
+  geom_bar(fill = "purple4", color = "black") +
+  labs(title = "Capsular Penetration Status", x = "CAPSULE (0 = No, 1 = Yes)", y = "Count") + theme_minimal()
+```
